@@ -1,0 +1,28 @@
+@startuml
+
+title UdaConnect Architectural Design Diagram
+
+actor User
+
+User -> [Location Service] : gRPC
+User -> [REST Endpoints] : HTTP/REST
+
+cloud "Kafka Service" {
+[Kafka cluster]
+}
+
+cloud "Location Service" {
+[Location gRPC Server] -> [PostgreSQL] : pgClient 
+[Location gRPC Server] -> [Kafka cluster] : KafkaClient
+}
+
+cloud "REST Endpoints" {
+[Person Service REST Enpoint] -> [PostgreSQL] : pgClient 
+[Connection Service REST Endpoint] -> [PostgreSQL] : pgClient 
+}
+
+database "PostgreSQL" {
+[Location Database]
+}
+
+@enduml

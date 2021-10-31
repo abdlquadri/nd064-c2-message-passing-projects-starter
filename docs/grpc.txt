@@ -1,0 +1,13 @@
+## gRPC Location Service Endpoint
+
+## Sample Request Payload
+
+```
+LocationMessage {
+  id = "30";
+  person_id = "5";
+  longitude = "12.34";
+  latitude  "56.78";
+  creation_time = "2020-08-15 10:37:06.000000";
+}
+```

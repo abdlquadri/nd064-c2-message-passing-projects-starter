@@ -1,0 +1,10 @@
+## Deploy Kafka in kafka namespace in k8s
+kubectl create namespace kafka --kubeconfig kubeconfig 
+kubectl apply -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka --kubeconfig kubeconfig 
+
+## Deploy Person-Connection Service from my dockerhub
+PersonService now runs on 70005
+kubectl apply -f deployment/person-connection-server.yaml --kubeconfig kubeconfig
+
+## Deploy Location gRPC Service from  my dockerhub
+kubectl apply -f deployment/location-grpc-server.yaml --kubeconfig kubeconfig 
