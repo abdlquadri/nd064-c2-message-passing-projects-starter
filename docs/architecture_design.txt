@@ -2,8 +2,11 @@
 
 title UdaConnect Architectural Design Diagram
 
-actor User
+actor Client
 
+cloud "Kafka Service" {
+[Kafka queue]
+}
 
 cloud "Connection Service"{
 [Connection HTTP Server] -> [Person Service] : HTTP/REST
@@ -12,7 +15,8 @@ cloud "Connection Service"{
 
 
 cloud "Location Service"{
-[Location gRPC Server] -> [PostgreSQL] : pgClient 
+[Location gRPC Server] -> [Kafka queue] : Kafka client(Producer) 
+[Kafka queue] -> [PostgreSQL] : pgClient
 }
 
 
@@ -22,9 +26,9 @@ cloud "Person Service"{
 }
 
 
-User -> [Location gRPC Server] : gRPC
-User -> [Person HTTP Server] : HTTP/REST
-User -> [Connection HTTP Server] : HTTP/REST
+Client -> [Location gRPC Server] : gRPC
+Client -> [Person HTTP Server] : HTTP/REST
+Client -> [Connection HTTP Server] : HTTP/REST
 
 
 database "PostgreSQL" {

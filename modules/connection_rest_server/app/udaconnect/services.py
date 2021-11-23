@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from typing import Dict, List
 
 from app import db
-from app.udaconnect.models import Connection, Location, Person
+from models import Connection, Location, Person
 from sqlalchemy.sql import text
 
 import grpc

@@ -1,13 +1,12 @@
 from datetime import datetime
 
-from app.udaconnect.models import Person
-from app.udaconnect.schemas import (
+from models import Person
+from models import (
     ConnectionSchema,
-    PersonSchema,
 )
 from app.udaconnect.services import ConnectionService, PersonService
 from flask import request
-from flask_accepts import accepts, responds
+from flask_accepts import responds
 from flask_restx import Namespace, Resource
 from typing import Optional, List
 

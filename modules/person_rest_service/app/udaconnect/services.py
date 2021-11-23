@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from typing import Dict, List
 
 from app import db
-from app.udaconnect.models import Person
+from models import Person
 from sqlalchemy.sql import text
 
 logging.basicConfig(level=logging.WARNING)

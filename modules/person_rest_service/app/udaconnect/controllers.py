@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from app.udaconnect.models import Person
-from app.udaconnect.schemas import (
+from models import Person
+from models import (
     PersonSchema,
 )
 from app.udaconnect.services import PersonService
