@@ -31,7 +31,7 @@ spec:
         service: connection
     spec:
       containers:
-      - image: abdlquadri/connection-rest-server:v1.2.0
+      - image: abdlquadri/connection-rest-server:v1.3.0
         name: connection
         imagePullPolicy: Always
         env:

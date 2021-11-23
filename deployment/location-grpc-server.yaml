@@ -31,7 +31,7 @@ spec:
         service: location-grpc-server
     spec:
       containers:
-      - image: abdlquadri/location-grpc-server:v1.9.2
+      - image: abdlquadri/location-grpc-server:v1.9.3
         name: location-grpc-server
         imagePullPolicy: Always
         env:
