@@ -4,3 +4,4 @@
 4. I also refactored LocationService from REST to gRPC because we will need to accomodate for large influx of data.
 5. The current client should be enabled in future to send location data as gRPC requests.(Since the current client does not send location, I leave the implementation as is.)
 6. I have installed Kafka cluster in kubernetes.
+7. I implemented Kafka queue for the location data. This serves as a buffer in anticipation of high location data volume.

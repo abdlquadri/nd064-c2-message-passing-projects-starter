@@ -18,7 +18,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-TOPIC_NAME = 'items'
+TOPIC_NAME = 'location'
 KAFKA_SERVER = 'localhost:9092'
 
 
