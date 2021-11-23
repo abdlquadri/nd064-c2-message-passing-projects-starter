@@ -4,22 +4,28 @@ title UdaConnect Architectural Design Diagram
 
 actor User
 
-User -> [Location Service] : gRPC
-User -> [REST Endpoints] : HTTP/REST
 
-cloud "Kafka Service" {
-[Kafka cluster]
+cloud "Connection Service"{
+[Connection HTTP Server] -> [Person Service] : HTTP/REST
 }
+[Connection HTTP Server] -> [Location Service] : gRPC
 
-cloud "Location Service" {
+
+cloud "Location Service"{
 [Location gRPC Server] -> [PostgreSQL] : pgClient 
-[Location gRPC Server] -> [Kafka cluster] : KafkaClient
 }
 
-cloud "REST Endpoints" {
-[Person Service REST Enpoint] -> [PostgreSQL] : pgClient 
-[Connection Service REST Endpoint] -> [PostgreSQL] : pgClient 
+
+cloud "Person Service"{
+
+[Person HTTP Server] -> [PostgreSQL] : pgClient 
 }
+
+
+User -> [Location gRPC Server] : gRPC
+User -> [Person HTTP Server] : HTTP/REST
+User -> [Connection HTTP Server] : HTTP/REST
+
 
 database "PostgreSQL" {
 [Location Database]

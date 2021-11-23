@@ -4,13 +4,19 @@ from typing import Dict, List
 
 from app import db
 from app.udaconnect.models import Connection, Location, Person
-from app.udaconnect.schemas import ConnectionSchema, LocationSchema, PersonSchema
-from geoalchemy2.functions import ST_AsText, ST_Point
 from sqlalchemy.sql import text
 
-logging.basicConfig(level=logging.WARNING)
-logger = logging.getLogger("udaconnect-api")
+import grpc
+from location_proto import location_pb2_grpc
+from location_proto import location_pb2
 
+import requests
+
+logging.basicConfig(level=logging.WARNING)
+logger = logging.getLogger("udaconnect-connection-api")
+
+channel = grpc.insecure_channel("localhost:30007")
+stub = location_pb2_grpc.LocationServiceStub(channel)
 
 class ConnectionService:
     @staticmethod
@@ -23,14 +29,10 @@ class ConnectionService:
         large datasets. This is by design: what are some ways or techniques to help make this data integrate more
         smoothly for a better user experience for API consumers?
         """
-        locations: List = db.session.query(Location).filter(
-            Location.person_id == person_id
-        ).filter(Location.creation_time < end_date).filter(
-            Location.creation_time >= start_date
-        ).all()
+        locations: List = stub.Get(location_pb2.Empty())
 
         # Cache all users in memory for quick lookup
-        person_map: Dict[str, Person] = {person.id: person for person in PersonService.retrieve_all()}
+        person_map: Dict[str, Person] = {person.id: person for person in requests.get("http://localhost:30009/persons")}
 
         # Prepare arguments for queries
         data = []
@@ -79,26 +81,3 @@ class ConnectionService:
                 )
 
         return result
-
-
-class PersonService:
-    @staticmethod
-    def create(person: Dict) -> Person:
-        new_person = Person()
-        new_person.first_name = person["first_name"]
-        new_person.last_name = person["last_name"]
-        new_person.company_name = person["company_name"]
-
-        db.session.add(new_person)
-        db.session.commit()
-
-        return new_person
-
-    @staticmethod
-    def retrieve(person_id: int) -> Person:
-        person = db.session.query(Person).get(person_id)
-        return person
-
-    @staticmethod
-    def retrieve_all() -> List[Person]:
-        return db.session.query(Person).all()

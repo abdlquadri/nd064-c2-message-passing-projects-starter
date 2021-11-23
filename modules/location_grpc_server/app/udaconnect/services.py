@@ -6,13 +6,14 @@ import time
 from concurrent import futures
 
 import models
+from modules.api.app.udaconnect.models import Location
 import schemas
 from geoalchemy2.functions import ST_AsText, ST_Point
 from sqlalchemy.sql import text
 
 import grpc
-import location_pb2
-import location_pb2_grpc
+from location_proto import location_pb2
+from location_proto import location_pb2_grpc
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -30,10 +31,21 @@ class LocationService:
         )
         location.wkt_shape = coord_text
         return location
+    
+
+    def find_by_person(person_id: int, start_date: datetime, end_date: datetime, meters=5) -> List[Location]:
+        locations =db.session.query(Location).filter(
+            Location.person_id == person_id
+        ).filter(Location.creation_time < end_date).filter(
+            Location.creation_time >= start_date
+        ).all()
+        result = location_pb2.LocationMessageList()
+        result.locations.extend(locations)
+        return result
+
 
     def Create(self, request, context):
         print("Received a location message!")
-
         new_location = {
             "id": request.id,
             "person_id": request.person_id,
@@ -42,7 +54,6 @@ class LocationService:
         }
         db.session.add(new_location)
         db.session.commit()
-
         return location_pb2.LocationMessage(**new_location)
 
 

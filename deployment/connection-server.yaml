@@ -2,8 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    service: person-connection
-  name: person-connection
+    service: connection
+  name: connection
 spec:
   ports:
   - name: "5000"
@@ -11,28 +11,28 @@ spec:
     targetPort: 5000
     nodePort: 30005
   selector:
-    service: person-connection
+    service: connection
   type: NodePort
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    service: person-connection
-  name: person-connection
+    service: connection
+  name: connection
 spec:
   replicas: 1
   selector:
     matchLabels:
-      service: person-connection
+      service: connection
   template:
     metadata:
       labels:
-        service: person-connection
+        service: connection
     spec:
       containers:
-      - image: abdlquadri/person-connection-rest-server:v1.2.0
-        name: person-connection
+      - image: abdlquadri/connection-rest-server:v1.2.0
+        name: connection
         imagePullPolicy: Always
         env:
         - name: DB_USERNAME
