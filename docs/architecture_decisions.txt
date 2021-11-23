@@ -1,5 +1,6 @@
-1. I extracted the LocationService into its own module to take advantage of separation concerns to enable horizontal scaling due to load expected from location events.
-2. I extracted the Connection and Person services into a single modules to make the refactor migration simpler.
-3. I also refactored LocationService from REST to gRPC because we will need to accomodate for large influx of data.
-4. The current should be enabled in future to send location data as gRPC requests.(Since the current client does not send location, I leave the implementation as is.)
-5. I have installed Kafka cluster in kubernetes.
+1. I extracted the LocationService into its own module and made it gRPC to take advantage of separation concerns to enable horizontal scaling due to load expected from location events.
+2. I extracted the Connection and Person services into a separate modules to further the microservice architecture.
+3. I also made the generate gRPC fies into a separate module for reuse.
+4. I also refactored LocationService from REST to gRPC because we will need to accomodate for large influx of data.
+5. The current should be enabled in future to send location data as gRPC requests.(Since the current client does not send location, I leave the implementation as is.)
+6. I have installed Kafka cluster in kubernetes.
