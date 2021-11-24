@@ -2,7 +2,7 @@ import logging
 from datetime import datetime, timedelta
 from typing import Dict, List
 
-from kafka import KafkaProducer, KafkaConsumer
+from kafka import KafkaProducer
 
 import time
 from concurrent import futures
@@ -23,7 +23,6 @@ KAFKA_SERVER = 'localhost:9092'
 
 
 producer = KafkaProducer(bootstrap_servers=KAFKA_SERVER)
-consumer = KafkaConsumer(TOPIC_NAME)
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger("udaconnect-location-api")
@@ -52,7 +51,7 @@ class LocationService:
 
 
     def Create(self, request, context):
-        print("Received a location message!")
+        logger.info("Received a location message!")
         new_location = {
             "id": request.id,
             "person_id": request.person_id,
@@ -71,15 +70,12 @@ if __name__ == "__main__":
     location_pb2_grpc.add_LocationServiceServicer_to_server(LocationService(), server)
 
 
-    print("Server starting on port 5005...")
+    logger.info("Server starting on port 5005...")
     server.add_insecure_port("[::]:5005")
     server.start()
     # Keep thread alive
     try:
         while True:
-            for location in consumer:
-                db.session.add(location)
-                db.session.commit()
             time.sleep(86400)
     except KeyboardInterrupt:
         server.stop(0)    

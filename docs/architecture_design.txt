@@ -8,21 +8,27 @@ cloud "Kafka Service" {
 [Kafka queue]
 }
 
+cloud "Kafka" {
+[Kafka Consumer]
+}
+
 cloud "Connection Service"{
-[Connection HTTP Server] -> [Person Service] : HTTP/REST
+[Connection HTTP Server] <- [Person Service] : HTTP/REST
 }
 [Connection HTTP Server] -> [Location Service] : gRPC
 
 
 cloud "Location Service"{
 [Location gRPC Server] -> [Kafka queue] : Kafka client(Producer) 
-[Kafka queue] -> [PostgreSQL] : pgClient
+[Kafka queue] -> [Kafka Consumer] : Kafka client(Consumer)
+[Kafka Consumer] -> [PostgreSQL] : pgClient
 }
 
 
 cloud "Person Service"{
 
-[Person HTTP Server] -> [PostgreSQL] : pgClient 
+[Person HTTP Server] <-> [PostgreSQL] : pgClient 
+
 }
 
 
